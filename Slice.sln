@@ -46,7 +46,7 @@ int main()
     planeSource->Update();
 
 
-    auto unstructuredGrid = ReadUnstructuredGrid("C:/path/to file");
+    auto unstructuredGrid = ReadUnstructuredGrid("C:/Users/Barishev/Desktop/quad1.vtk");
 
 
     vtkNew<vtkPolyData> inputPolyData;
@@ -124,6 +124,7 @@ namespace {
         {
             extension = fileName.substr(fileName.find_last_of("."));
         }
+
         std::transform(extension.begin(), extension.end(), extension.begin(),
             ::tolower);
 
@@ -141,6 +142,7 @@ namespace {
             reader->Update();
             unstructuredGrid = reader->GetOutput();
         }
+
         return unstructuredGrid;
     }
 }
