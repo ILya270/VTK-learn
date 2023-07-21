@@ -45,7 +45,7 @@ def convert(file: UploadFile):
     writer.SetFileName("outputXMLfromVTK.xml")
     writer.Write()
 
-@app.post("/toVTKconvert")
+@app.post("/toVTKconvert") #Конвертация файла из XML в VTK
 def convert(file: UploadFile):
     reader = vtk.vtkXMLUnstructuredGridReader()
     reader.SetFileName(file.filename)
@@ -56,19 +56,19 @@ def convert(file: UploadFile):
     writer.SetFileName("outputVTKfromXML.vtk")
     writer.Write()
 
-@app.post("/CanReadFile")
+@app.post("/CanReadFile") #Прототип функции для проверки на возможность чтения k файла
 def canread(file: UploadFile):
     reader = vtk.vtkLSDynaReader()
     reader.SetFileName(file.filename)
     reader.Update()
     return lsr.CanReadFile(reader)
 
-@app.post("/fromVTKtoK")
+@app.post("/fromVTKtoK") #Прототип функции для конвертации 
 def convert(file: UploadFile):
     mesh = meshio.read(file.filename, file_format="vtk")
     return  meshio.write("outputdolfin.k", mesh, file_format="k")
 
-@app.post("/SliceFilter")
+@app.post("/SliceFilter") #Фильтр, возвращающий сечение получаемое плоскостью и входной сеткой
 def Sfilter(file: UploadFile):
     reader = vtk.vtkUnstructuredGridReader()
     reader.SetFileName(file.filename)
@@ -88,7 +88,7 @@ def Sfilter(file: UploadFile):
     writer.SetInputData(cutter.GetOutput())
     writer.Write()
     
-@app.post("/ValueFilter")
+@app.post("/ValueFilter") #Функция для организации фильтрации сетки по значениям точек и значениям ячеек
 def Vfilter(file: UploadFile):
     reader = vtk.vtkUnstructuredGridReader()
     reader.SetFileName(file.filename)
@@ -107,7 +107,7 @@ def Vfilter(file: UploadFile):
     combined_filter.AddInputConnection(cell_filter.GetOutputPort())
     combined_filter.Update()
 
-    filtered_output = combined_filter.GetOutput()
+    filtered_output = combined_filter.GetOutput() #Объединение фильтров по точкам и ячейкам
 
     writer = vtk.vtkUnstructuredGridWriter()
     writer.SetFileName("ValueFilterOUT.vtk")
